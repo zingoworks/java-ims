@@ -8,7 +8,6 @@ import codesquad.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,17 +19,12 @@ public class UserService {
 
     public User add(UserDto userDto) {
         return userRepository.save(userDto._toUser());
-}
+    }
 
     public User update(User loginUser, long id, UserDto updatedUser) {
         User original = findById(loginUser, id);
         original.update(loginUser, updatedUser._toUser());
         return userRepository.save(original);
-    }
-
-    public User findById(long id) {
-        return userRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
     }
 
     public User findById(User loginUser, long id) {

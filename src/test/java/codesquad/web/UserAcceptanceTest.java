@@ -39,15 +39,14 @@ public class UserAcceptanceTest extends BasicAuthAcceptanceTest {
 
         softly.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
         softly.assertThat(userRepository.findByUserId(userId)).isNotNull();
-        softly.assertThat(response.getHeaders().getLocation().getPath()).isEqualTo("/");
+        softly.assertThat(response.getHeaders().getLocation().getPath()).isEqualTo("/users");
     }
 
     @Test
     public void updateForm_no_login() throws Exception {
         ResponseEntity<String> response = template.getForEntity(String.format("/users/%d/form", loginUser.getId()),
                 String.class);
-        softly.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
-        softly.assertThat(response.getHeaders().getLocation().getPath()).startsWith("/users/login");
+        softly.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 
     @Test
@@ -61,8 +60,7 @@ public class UserAcceptanceTest extends BasicAuthAcceptanceTest {
     @Test
     public void update_no_login() throws Exception {
         ResponseEntity<String> response = update(template);
-        softly.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
-        softly.assertThat(response.getHeaders().getLocation().getPath()).startsWith("/users/login");
+        softly.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 
     private ResponseEntity<String> update(TestRestTemplate template) throws Exception {
@@ -79,6 +77,6 @@ public class UserAcceptanceTest extends BasicAuthAcceptanceTest {
     public void update() throws Exception {
         ResponseEntity<String> response = update(basicAuthTemplate);
         softly.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
-        softly.assertThat(response.getHeaders().getLocation().getPath()).isEqualTo("/");
+        softly.assertThat(response.getHeaders().getLocation().getPath()).isEqualTo("/users");
     }
 }
