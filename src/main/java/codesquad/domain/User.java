@@ -2,6 +2,7 @@ package codesquad.domain;
 
 import codesquad.UnAuthorizedException;
 import codesquad.dto.UserDto;
+import codesquad.exception.InvalidPasswordException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import support.domain.AbstractEntity;
 
@@ -77,7 +78,7 @@ public class User extends AbstractEntity {
         }
 
         if (!matchPassword(target.getPassword())) {
-            return;
+            throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
         }
 
         this.name = target.name;

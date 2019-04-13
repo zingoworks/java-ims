@@ -1,70 +1,62 @@
 package codesquad.domain;
 
 import codesquad.UnAuthorizedException;
+import codesquad.exception.InvalidPasswordException;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 
 public class UserTest {
-    public static final User JAVAJIGI = new User(1L, "javajigi", "password", "name");
-    public static final User SANJIGI = new User(2L, "sanjigi", "password", "name");
-
-    public static User newUser(Long id) {
-        return new User(id, "userId", "pass", "name");
-    }
-
-    public static User newUser(String userId) {
-        return newUser(userId, "password");
-    }
-
-    public static User newUser(String userId, String password) {
-        return new User(1L, userId, password, "name");
-    }
+    public static final User ADMIN = new User(1L, "admin", "password", "adminName");
+    public static final User ZINGO = new User(1L, "zingo", "password", "zingoName");
 
     @Test
     public void update_owner() throws Exception {
-        User origin = newUser("sanjigi");
+        User origin = ADMIN;
         User loginUser = origin;
-        User target = new User("sanjigi", "password", "name2");
+
+        User target = new User("admin", "password", "targetName");
         origin.update(loginUser, target);
-        assertThat(origin.getName(), is(target.getName()));
+
+        assertThat(origin.getName()).isEqualTo(target.getName());
     }
 
     @Test(expected = UnAuthorizedException.class)
     public void update_not_owner() throws Exception {
-        User origin = newUser("sanjigi");
-        User loginUser = newUser("javajigi");
-        User target = new User("sanjigi", "password", "name2");
+        User origin = ADMIN;
+        User loginUser = ZINGO;
+        User target = new User("admin", "password", "targetName");
         origin.update(loginUser, target);
     }
 
     @Test
     public void update_match_password() {
-        User origin = newUser("sanjigi");
-        User target = new User("sanjigi", "password", "name2");
+        User origin = ADMIN;
+        User target = new User("admin", "password", "targetName");
         origin.update(origin, target);
-        assertThat(origin.getName(), is(target.getName()));
+
+        assertThat(origin.getName()).isEqualTo(target.getName());
     }
 
-    @Test
+    @Test(expected = InvalidPasswordException.class)
     public void update_mismatch_password() {
-        User origin = newUser("sanjigi", "password");
-        User target = new User("sanjigi", "password2", "name2");
+        User origin = ADMIN;
+        User target = new User("admin", "wrongPassword", "targetName");
         origin.update(origin, target);
-        assertThat(origin.getName(), is(not(target.getName())));
     }
 
     @Test
     public void match_password() throws Exception {
-        User user = newUser("sanjigi");
+        User user = ADMIN;
         assertTrue(user.matchPassword(user.getPassword()));
     }
 
     @Test
     public void mismatch_password() throws Exception {
-        User user = newUser("sanjigi");
+        User user = ADMIN;
         assertFalse(user.matchPassword(user.getPassword() + "2"));
     }
 }
