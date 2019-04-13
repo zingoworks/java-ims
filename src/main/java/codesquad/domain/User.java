@@ -4,12 +4,14 @@ import codesquad.UnAuthorizedException;
 import codesquad.dto.UserDto;
 import codesquad.exception.InvalidPasswordException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import support.domain.AbstractEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Size;
 
+@Data
 @Entity
 public class User extends AbstractEntity {
     public static final GuestUser GUEST_USER = new GuestUser();
@@ -39,33 +41,6 @@ public class User extends AbstractEntity {
         this.userId = userId;
         this.password = password;
         this.name = name;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public User setUserId(String userId) {
-        this.userId = userId;
-        return this;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public User setPassword(String password) {
-        this.password = password;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public User setName(String name) {
-        this.name = name;
-        return this;
     }
 
     private boolean matchUserId(String userId) {
@@ -102,10 +77,5 @@ public class User extends AbstractEntity {
         public boolean isGuestUser() {
             return true;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "User [userId=" + userId + ", password=" + password + ", name=" + name + "]";
     }
 }

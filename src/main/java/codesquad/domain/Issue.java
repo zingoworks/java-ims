@@ -1,6 +1,7 @@
 package codesquad.domain;
 
 import codesquad.UnAuthorizedException;
+import lombok.Data;
 import support.domain.AbstractEntity;
 
 import javax.persistence.Column;
@@ -8,8 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
+@Data
 @Entity
 public class Issue extends AbstractEntity {
 
@@ -51,44 +52,5 @@ public class Issue extends AbstractEntity {
 
     private boolean matchAuthor(User loginUser) {
         return this.author == loginUser;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Issue issue = (Issue) o;
-        return Objects.equals(subject, issue.subject) &&
-                Objects.equals(comment, issue.comment);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), subject, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "Issue{" +
-                "subject='" + subject + '\'' +
-                ", comment='" + comment + '\'' +
-                '}';
     }
 }
