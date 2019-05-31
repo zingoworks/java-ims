@@ -2,6 +2,7 @@ package codesquad.domain;
 
 import codesquad.UnAuthorizedException;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import support.domain.AbstractEntity;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 public class Issue extends AbstractEntity {

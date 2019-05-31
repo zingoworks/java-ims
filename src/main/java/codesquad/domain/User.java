@@ -4,13 +4,16 @@ import codesquad.UnAuthorizedException;
 import codesquad.dto.UserDto;
 import codesquad.exception.InvalidPasswordException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import support.domain.AbstractEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Size;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 public class User extends AbstractEntity {
@@ -43,10 +46,6 @@ public class User extends AbstractEntity {
         this.name = name;
     }
 
-    private boolean matchUserId(String userId) {
-        return this.userId.equals(userId);
-    }
-
     public void update(User loginUser, User target) {
         if (!matchUserId(loginUser.getUserId())) {
             throw new UnAuthorizedException();
@@ -57,6 +56,10 @@ public class User extends AbstractEntity {
         }
 
         this.name = target.name;
+    }
+
+    private boolean matchUserId(String userId) {
+        return this.userId.equals(userId);
     }
 
     public boolean matchPassword(String password) {
